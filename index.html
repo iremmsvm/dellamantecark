@@ -21,6 +21,7 @@
         background-repeat: no-repeat;
         background-position: center;
         background-attachment: fixed;
+        padding: 20px;
       }
 
       .wheel-container {
@@ -31,34 +32,31 @@
         background-image: url("https://i.ibb.co/4tQHjPm/son-1.jpg");
         background-size: cover;
         background-position: center;
-        padding: 30px;
+        padding: 20px;
         border-radius: 20px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         position: relative;
         border: 2px solid rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(5px);
+        width: 90%;
+        max-width: 500px;
       }
 
       .logo {
+        width: 80%;
         max-width: 200px;
-        max-height: 150px;
+        height: auto;
         margin-bottom: 20px;
         filter: drop-shadow(0 0 10px rgba(255, 165, 0, 0.3));
         animation: logoGlow 2s infinite alternate;
       }
 
-      @keyframes logoGlow {
-        from {
-          filter: drop-shadow(0 0 10px rgba(255, 165, 0, 0.3));
-        }
-        to {
-          filter: drop-shadow(0 0 20px rgba(255, 165, 0, 0.6));
-        }
-      }
-
       .canvas-container {
         position: relative;
-        margin-bottom: 20px;
+        width: 100%;
+        max-width: 400px;
+        aspect-ratio: 1;
+        margin: 0 auto 20px;
         transform: scale(1);
         transition: transform 0.3s ease;
       }
@@ -68,37 +66,27 @@
       }
 
       canvas {
+        width: 100%;
+        height: 100%;
         border: 8px solid #4e2000;
         border-radius: 50%;
         background-color: #4e2000;
         box-shadow: 0 0 30px rgba(255, 165, 0, 0.3);
-        width: 400px; /* CSS boyut */
-        height: 400px; /* CSS boyut */
       }
-      
 
       .pointer {
         width: 0;
         height: 0;
-        border-left: 20px solid transparent;
-        border-right: 20px solid transparent;
-        border-top: 40px solid #4e2000;
+        border-left: 15px solid transparent;
+        border-right: 15px solid transparent;
+        border-top: 30px solid #4e2000;
         position: absolute;
-        top: -20px;
+        top: -15px;
         left: 50%;
         transform: translateX(-50%);
         z-index: 1;
         filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
         animation: pointerGlow 1.5s infinite alternate;
-      }
-
-      @keyframes pointerGlow {
-        from {
-          filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
-        }
-        to {
-          filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8));
-        }
       }
 
       .light {
@@ -111,24 +99,15 @@
         animation: blink 1s infinite alternate;
       }
 
-      @keyframes blink {
-        0% {
-          opacity: 0.3;
-          transform: scale(0.8);
-        }
-        100% {
-          opacity: 1;
-          transform: scale(1.2);
-        }
-      }
-
       .shine-effect {
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 100%;
         border-radius: 50%;
+        transform-origin: center;
+        transform: translate(-50%, -50%);
         background: linear-gradient(
           90deg,
           transparent 40%,
@@ -136,40 +115,32 @@
           transparent 50%
         );
         pointer-events: none;
-        transform-origin: center center;
         animation: shine 3s infinite linear;
-      }
-
-      @keyframes shine {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
       }
 
       .buttons {
         display: flex;
-        justify-content: center;
-        gap: 20px;
-        margin-top: 20px;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        max-width: 300px;
       }
 
       button {
-        padding: 12px 30px;
-        font-size: 20px;
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
         font-weight: bold;
         color: white;
         border: none;
         border-radius: 10px;
         cursor: pointer;
-        transition: all 0.3s ease;
-        background: linear-gradient(135deg,#e96b24, #e96b24);
+        background: linear-gradient(135deg, #e96b24, #e96b24);
         box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
         font-family: "Playfair Display", serif;
         text-transform: uppercase;
         letter-spacing: 1px;
+        transition: all 0.3s ease;
       }
 
       button:hover {
@@ -184,32 +155,80 @@
       }
 
       .message {
-        font-size: 24px;
+        font-size: 18px;
         color: white;
         margin-top: 20px;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         min-height: 36px;
+        padding: 0 10px;
+      }
+
+      @media (min-width: 768px) {
+        .wheel-container {
+          padding: 30px;
+        }
+
+        .buttons {
+          flex-direction: row;
+          justify-content: center;
+        }
+
+        button {
+          width: auto;
+          padding: 12px 30px;
+          font-size: 20px;
+        }
+
+        .message {
+          font-size: 24px;
+        }
+
+        .pointer {
+          border-left: 20px solid transparent;
+          border-right: 20px solid transparent;
+          border-top: 40px solid #4e2000;
+          top: -20px;
+        }
+      }
+
+      @keyframes logoGlow {
+        from { filter: drop-shadow(0 0 10px rgba(255, 165, 0, 0.3)); }
+        to { filter: drop-shadow(0 0 20px rgba(255, 165, 0, 0.6)); }
+      }
+
+      @keyframes pointerGlow {
+        from { filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5)); }
+        to { filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8)); }
+      }
+
+      @keyframes blink {
+        0% {
+          opacity: 0.3;
+          transform: scale(0.8);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1.2);
+        }
+      }
+
+      @keyframes shine {
+        from {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+        to {
+          transform: translate(-50%, -50%) rotate(360deg);
+        }
       }
     </style>
   </head>
   <body>
     <div class="wheel-container">
-      <img
-        class="logo"
-        src="https://i.ibb.co/qFrB7Zp/lo.png"
-        alt="Logo"
-      />
-      <style>
-        .logo {
-          max-width: 200%;
-          height: auto;
-        }
-      </style>
-      <div class="canvas-container" id="canvasContainer">
+      <img class="logo" src="https://i.ibb.co/qFrB7Zp/lo.png" alt="Logo" />
+      <div class="canvas-container">
         <div class="pointer"></div>
-        <canvas id="wheel" width="400" height="400"></canvas>
+        <canvas id="wheel"></canvas>
         <div class="shine-effect"></div>
-        <div class="prize-glow"></div>
       </div>
       <div class="message" id="message"></div>
       <div class="buttons">
@@ -220,26 +239,17 @@
 
     <script>
       const canvas = document.getElementById('wheel');
-      const ctx = canvas.getContext('2d');
-      const messageEl = document.getElementById('message');
-
-      // Dilimler ve ağırlıkları (olasılıkları)
-      const segments = [
-        { text: "%5", weight: 40 },      // %40 olasılık
-        { text: "%15", weight: 15 },     // %15 olasılık
-        { text: "%25", weight: 10 },     // %10 olasılık
-        { text: "Kahve İkramı", weight: 17.5 },  // %17.5 olasılık
-        { text: "Çay İkramı", weight: 17.5 }     // %17.5 olasılık
-      ];
-
-      const colors = ["#21743a", "#21743a", "#21743a", "#21743a", "#21743a"];
-      let currentRotation = 0;
-      let isSpinning = false;
-
+      const container = document.querySelector('.canvas-container');
+      
       function addLights() {
-        const centerX = canvas.width / 2;
-        const centerY = canvas.height / 2;
-        const radius = canvas.width / 2 + 5;
+        const containerWidth = container.offsetWidth;
+        const centerX = containerWidth / 2;
+        const centerY = containerWidth / 2;
+        const radius = containerWidth / 2 + 5;
+
+        // Önceki ışıkları temizle
+        const oldLights = container.querySelectorAll('.light');
+        oldLights.forEach(light => light.remove());
 
         for (let i = 0; i < 20; i++) {
           const angle = (i * 18 * Math.PI) / 180;
@@ -251,29 +261,61 @@
           light.style.left = x + "px";
           light.style.top = y + "px";
           light.style.animationDelay = `${i * 0.05}s`;
-          document.getElementById("canvasContainer").appendChild(light);
+          container.appendChild(light);
         }
       }
 
+      function resizeCanvas() {
+        const containerWidth = container.offsetWidth;
+        canvas.width = containerWidth;
+        canvas.height = containerWidth;
+        drawWheel();
+        addLights(); // Işıkları yeniden konumlandır
+      }
+
+      window.addEventListener('load', () => {
+        resizeCanvas();
+        addLights();
+      });
+      window.addEventListener('resize', resizeCanvas);
+
+      const ctx = canvas.getContext('2d');
+      const messageEl = document.getElementById('message');
+
+      const segments = [
+        { text: "%5", weight: 40 },
+        { text: "%15", weight: 15 },
+        { text: "%25", weight: 10 },
+        { text: "Kahve İkramı", weight: 17.5 },
+        { text: "Çay İkramı", weight: 17.5 }
+      ];
+
+      const colors = ["#21743a", "#21743a", "#21743a", "#21743a", "#21743a"];
+      let currentRotation = 0;
+      let isSpinning = false;
+
       function drawWheel() {
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const radius = canvas.width / 2;
+
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
         const sliceAngle = (2 * Math.PI) / segments.length;
         
         for (let i = 0; i < segments.length; i++) {
           ctx.beginPath();
-          ctx.moveTo(200, 200);
-          ctx.arc(200, 200, 200, i * sliceAngle + currentRotation, (i + 1) * sliceAngle + currentRotation);
-          ctx.lineTo(200, 200);
+          ctx.moveTo(centerX, centerY);
+          ctx.arc(centerX, centerY, radius, i * sliceAngle + currentRotation, (i + 1) * sliceAngle + currentRotation);
+          ctx.lineTo(centerX, centerY);
           ctx.fillStyle = colors[i];
           ctx.fill();
           ctx.strokeStyle = "#fff";
           ctx.lineWidth = 2;
           ctx.stroke();
 
-          // Text
           ctx.save();
-          ctx.translate(200, 200);
+          ctx.translate(centerX, centerY);
           const textAngle = i * sliceAngle + sliceAngle / 2 + currentRotation;
           ctx.rotate(textAngle);
           ctx.textAlign = "right";
@@ -281,17 +323,13 @@
           ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
           ctx.shadowBlur = 2;
           
-          // Adjust font size based on text length
           const text = segments[i].text;
-          const fontSize = text.length > 8 ? 20 : 28;
+          const fontSize = Math.min(radius * 0.15, text.length > 8 ? 20 : 28);
           ctx.font = `bold ${fontSize}px 'Playfair Display'`;
           
-          ctx.fillText(text, 180, 10);
+          ctx.fillText(text, radius * 0.8, 0);
           ctx.restore();
         }
-
-        
-
       }
 
       function getRandomSegment() {
@@ -330,7 +368,6 @@
           const elapsed = currentTime - startTime;
           const progress = Math.min(elapsed / spinDuration, 1);
           
-          // Easing function
           const easeOut = 1 - Math.pow(1 - progress, 3);
           currentRotation = startRotation + (targetRotation * easeOut);
           
@@ -354,15 +391,12 @@
 
       document.getElementById('spin-btn').addEventListener('click', spinWheel);
 
-      // Check if wheel can be spun today
       const today = new Date().toDateString();
       if (localStorage.getItem('lastSpin') === today) {
         messageEl.textContent = "Bu çarkı bugün kullandınız, yarın tekrar deneyebilirsiniz!";
       }
 
-      // Initial setup
       drawWheel();
-      addLights();
     </script>
   </body>
 </html>
