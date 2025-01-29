@@ -16,7 +16,7 @@
         align-items: center;
         min-height: 100vh;
         margin: 0;
-        background-image: url("https://i.ibb.co/kKxmDDH/coffee.jpg");
+        background-image: url("https://i.ibb.co/Y5jQzSh/wp2641154.jpg");
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center;
@@ -267,10 +267,16 @@
 
       function resizeCanvas() {
         const containerWidth = container.offsetWidth;
-        canvas.width = containerWidth;
-        canvas.height = containerWidth;
+        const scale = window.devicePixelRatio || 1;
+        
+        canvas.width = containerWidth * scale;
+        canvas.height = containerWidth * scale;
+        canvas.style.width = containerWidth + 'px';
+        canvas.style.height = containerWidth + 'px';
+        
+        ctx.scale(scale, scale);
         drawWheel();
-        addLights(); // Işıkları yeniden konumlandır
+        addLights();
       }
 
       window.addEventListener('load', () => {
@@ -278,6 +284,7 @@
         addLights();
       });
       window.addEventListener('resize', resizeCanvas);
+      window.addEventListener('orientationchange', resizeCanvas);
 
       const ctx = canvas.getContext('2d');
       const messageEl = document.getElementById('message');
@@ -294,44 +301,112 @@
       let currentRotation = 0;
       let isSpinning = false;
 
+      
       function drawWheel() {
-        const centerX = canvas.width / 2;
-        const centerY = canvas.height / 2;
-        const radius = canvas.width / 2;
-
+        const centerX = canvas.width / (2 * (window.devicePixelRatio || 1));
+        const centerY = canvas.height / (2 * (window.devicePixelRatio || 1));
+        const radius = Math.min(centerX, centerY) * 0.9;
+    
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        const sliceAngle = (2 * Math.PI) / segments.length;
+        const totalSegments = segments.length;
+        const anglePerSegment = (2 * Math.PI) / totalSegments;
         
-        for (let i = 0; i < segments.length; i++) {
-          ctx.beginPath();
-          ctx.moveTo(centerX, centerY);
-          ctx.arc(centerX, centerY, radius, i * sliceAngle + currentRotation, (i + 1) * sliceAngle + currentRotation);
-          ctx.lineTo(centerX, centerY);
-          ctx.fillStyle = colors[i];
-          ctx.fill();
-          ctx.strokeStyle = "#fff";
-          ctx.lineWidth = 2;
-          ctx.stroke();
-
-          ctx.save();
-          ctx.translate(centerX, centerY);
-          const textAngle = i * sliceAngle + sliceAngle / 2 + currentRotation;
-          ctx.rotate(textAngle);
-          ctx.textAlign = "right";
-          ctx.fillStyle = "white";
-          ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
-          ctx.shadowBlur = 2;
-          
-          const text = segments[i].text;
-          const fontSize = Math.min(radius * 0.15, text.length > 8 ? 20 : 28);
-          ctx.font = `bold ${fontSize}px 'Playfair Display'`;
-          
-          ctx.fillText(text, radius * 0.8, 0);
-          ctx.restore();
+        // Segmentleri güncelle
+        const updatedSegments = segments.map(segment => {
+            if (segment.text.includes('%')) {
+                const number = segment.text.replace('%', '').trim();
+                return { ...segment, text: `% ${number}` };
+            }
+            return segment;
+        });
+        
+        for (let i = 0; i < totalSegments; i++) {
+            // Dilim çizimi
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            
+            const startAngle = i * anglePerSegment + currentRotation;
+            const endAngle = (i + 1) * anglePerSegment + currentRotation;
+            
+            ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+            ctx.lineTo(centerX, centerY);
+            ctx.fillStyle = colors[i];
+            ctx.fill();
+            ctx.strokeStyle = "#fff";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+    
+            // Kıvrımlı metin çizimi
+            ctx.save();
+            ctx.fillStyle = "white";
+            ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+            ctx.shadowBlur = 2;
+            
+            // Responsive font boyutu
+            const fontSize = Math.min(radius * 0.12, 24);
+            ctx.font = `bold ${fontSize}px 'Playfair Display'`;
+    
+            const text = updatedSegments[i].text;
+            const textRadius = radius * 0.75;
+    
+            if (text.startsWith('%')) {
+                const chars = text.split('');
+                const letterSpacing = anglePerSegment / (chars.length + 2); // Biraz daha fazla boşluk için +2
+    
+                chars.forEach((char, index) => {
+                    const charAngle = startAngle + letterSpacing * (index + 1);
+                    
+                    ctx.save();
+                    const x = centerX + Math.cos(charAngle) * textRadius;
+                    const y = centerY + Math.sin(charAngle) * textRadius;
+                    
+                    ctx.translate(x, y);
+                    ctx.rotate(charAngle + Math.PI / 2);
+                    
+                    ctx.fillStyle = "white";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    
+                    ctx.fillText(char, 0, 0);
+                    ctx.restore();
+                });
+            } else {
+                // Normal metinler için standart aralık
+                const chars = text.split('');
+                const letterSpacing = anglePerSegment / (chars.length + 1);
+    
+                chars.forEach((char, index) => {
+                    const charAngle = startAngle + letterSpacing * (index + 1);
+                    
+                    ctx.save();
+                    const x = centerX + Math.cos(charAngle) * textRadius;
+                    const y = centerY + Math.sin(charAngle) * textRadius;
+                    
+                    ctx.translate(x, y);
+                    ctx.rotate(charAngle + Math.PI / 2);
+                    
+                    ctx.fillStyle = "white";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    
+                    ctx.fillText(char, 0, 0);
+                    ctx.restore();
+                });
+            }
+    
+            ctx.restore();
         }
-      }
-
+    }
+    
+    // Başlangıçtaki segments dizisini güncelle
+    segments = segments.map(segment => {
+        if (segment.text.includes('%')) {
+            const number = segment.text.replace('%', '').trim();
+            return { ...segment, text: `% ${number}` };
+        }
+        return segment;
+    });
       function getRandomSegment() {
         const totalWeight = segments.reduce((sum, segment) => sum + segment.weight, 0);
         let random = Math.random() * totalWeight;
