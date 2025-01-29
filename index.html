@@ -316,7 +316,7 @@
         const updatedSegments = segments.map(segment => {
             if (segment.text.includes('%')) {
                 const number = segment.text.replace('%', '').trim();
-                return { ...segment, text: `% ${number}` };
+                return { ...segment, text: `%${number}` }; // Boşluksuz hale getirildi
             }
             return segment;
         });
@@ -351,8 +351,8 @@
             const textRadius = radius * 0.75;
     
             if (text.startsWith('%')) {
-                const chars = text.split('');
-                const letterSpacing = anglePerSegment / (chars.length + 2); // Biraz daha fazla boşluk için +2
+                const chars = text.split();
+                const letterSpacing = anglePerSegment / (chars.length + 1); // Biraz daha fazla boşluk için +2
     
                 chars.forEach((char, index) => {
                     const charAngle = startAngle + letterSpacing * (index + 1);
